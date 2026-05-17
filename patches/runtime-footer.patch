@@ -1,0 +1,76 @@
+--- a/gateway/runtime_footer.py
++++ b/gateway/runtime_footer.py
+@@ -30,9 +30,34 @@
+ _SEP = " · "
+ 
+ 
++def _format_duration(seconds: float) -> str:
++    """Format duration as compact human-readable string."""
++    if seconds <= 0:
++        return ""
++    if seconds < 1.0:
++        return f"{seconds * 1000:.0f}ms"
++    if seconds < 60:
++        return f"{seconds:.1f}s"
++    mins = int(seconds // 60)
++    secs = seconds % 60
++    return f"{mins}m{secs:.0f}s"
++
++
++def _format_tokens(n: int) -> str:
++    """Format token count: 1500 to '1.5K', 1234 to '1.2K'."""
++    if n <= 0:
++        return ""
++    if n < 1000:
++        return str(n)
++    return f"{n / 1000:.1f}K"
++
++
+ def _home_relative_cwd(cwd: str) -> str:
+     """Return *cwd* with ``$HOME`` collapsed to ``~``.  Empty string if unset."""
+     if not cwd:
+@@ -95,6 +120,9 @@
+     context_tokens: int,
+     context_length: Optional[int],
+     cwd: Optional[str] = None,
++    duration: Optional[float] = None,
++    output_tokens: int = 0,
++    input_tokens: int = 0,
+     fields: Iterable[str] = _DEFAULT_FIELDS,
+ ) -> str:
+     """Render the footer line, or return "" if no fields have data.
+@@ -108,6 +136,15 @@
+             m = _model_short(model)
+             if m:
+                 parts.append(m)
++        elif field == "duration":
++            if duration is not None and duration > 0:
++                d = _format_duration(duration)
++                if d:
++                    parts.append(d)
++        elif field == "tokens":
++            total = output_tokens + input_tokens
++            if total > 0:
++                parts.append(_format_tokens(total))
+         elif field == "context_pct":
+             if context_length and context_length > 0 and context_tokens >= 0:
+                 pct = max(0, min(100, round((context_tokens / context_length) * 100)))
+@@ -131,6 +168,9 @@
+     context_tokens: int,
+     context_length: Optional[int],
+     cwd: Optional[str] = None,
++    duration: Optional[float] = None,
++    output_tokens: int = 0,
++    input_tokens: int = 0,
+ ) -> str:
+     """Top-level entry point used by gateway/run.py.
+ 
+@@ -146,5 +186,8 @@
+         context_tokens=context_tokens,
+         context_length=context_length,
+         cwd=cwd,
++        duration=duration,
++        output_tokens=output_tokens,
++        input_tokens=input_tokens,
+         fields=cfg.get("fields") or _DEFAULT_FIELDS,
+     )

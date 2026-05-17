@@ -1,0 +1,26 @@
+name: feishu-message
+label: Feishu Message Enhancement
+kind: platform
+version: 1.0.0
+description: >
+  Enhanced Feishu (Lark) messaging for Hermes Agent — CardKit v2 streaming
+  cards, one-card-per-turn consolidation, runtime footer with model/duration/
+  tokens/context%, and proper markdown rendering via wide-screen interactive
+  cards.  Replaces the built-in Feishu adapter via platform_registry.
+author: Yang Quanyao (杨泉耀)
+homepage: https://github.com/yangquanyao/hermes-feishu-message
+license: MIT
+platforms:
+  - linux
+  - macos
+  - windows
+requires_env:
+  - name: FEISHU_APP_ID
+    description: "Feishu application ID from the developer console."
+    prompt: "Feishu App ID"
+    url: "https://open.feishu.cn/app"
+    password: false
+  - name: FEISHU_APP_SECRET
+    description: "Feishu application secret."
+    prompt: "Feishu App Secret"
+    password: true
