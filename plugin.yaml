@@ -7,8 +7,8 @@ description: >
   cards, one-card-per-turn consolidation, runtime footer with model/duration/
   tokens/context%, and proper markdown rendering via wide-screen interactive
   cards.  Replaces the built-in Feishu adapter via platform_registry.
-author: Yang Quanyao (杨泉耀)
-homepage: https://github.com/yangquanyao/hermes-feishu-message
+author: windinternet
+homepage: https://github.com/windinternet/hermes-feishu-message
 license: MIT
 platforms:
   - linux
